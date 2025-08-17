@@ -1,6 +1,8 @@
 import { useMemo } from "react"
 import type { Activity } from "../types"
-import CalorieDisplay from "./Caloriedisplay"
+import CalorieDisplay from "./CalorieDisplay.tsx"
+
+
 
 type CalorieTrackerProps = {
     activities: Activity[]
