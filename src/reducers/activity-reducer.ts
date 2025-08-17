@@ -6,15 +6,25 @@ export type ActivityActions =
 } | 
 {   type:'set-activeId',
     payload: {id : Activity['id']}
-} 
+} |
+{   type:'remove-activity',
+    payload: {id : Activity['id']}
+} |
+{   type:'restart-app'} //no necesita payload, es solo reiniciar
+ 
 
-type ActivityState = {
+export type ActivityState = {
     activities: Activity[],
     activeId: Activity['id']
 }
 
+const localStorageActivities = () : Activity[] => {
+    const activities = localStorage.getItem('activities')
+    return activities ? JSON.parse(activities) : []
+}
+
 export const initialState : ActivityState = {
-    activities: [],
+    activities: localStorageActivities(),
     activeId: ''
 }
 
@@ -24,9 +34,18 @@ export const activityReducer = (
     ) => {
 
     if(action.type === 'save-activity'){ //Código para actualizar el state
+        let updatedActivities: Activity[] = []
+        if(state.activeId){
+            updatedActivities = state.activities.map( activity => activity.id === state.activeId ? action.payload.newActivity : activity )
+        }
+        else{
+            updatedActivities = [...state.activities, action.payload.newActivity]
+        }
+
         return{
             ...state,
-            activities: [...state.activities, action.payload.newActivity]
+            activities: updatedActivities,
+            activeId: '' //Reiniciamos siempre el idActivo para que haya que seleccionar de nuevo si se quiere editar otro elemento
         }
     }
 
@@ -34,6 +53,19 @@ export const activityReducer = (
         return{
             ...state,
             activeId: action.payload.id
+        }
+    }
+
+    if(action.type === 'remove-activity'){
+        return{
+            ...state,
+            activities: state.activities.filter( activity => activity.id !== action.payload.id)
+        }
+    }
+    if(action.type === 'restart-app'){
+        return{
+            activities: [],
+            activeId: ''
         }
     }
 

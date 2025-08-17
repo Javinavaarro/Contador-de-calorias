@@ -1,11 +1,12 @@
 import { categories } from "../data/categories"
 import { v4 as uuidv4 } from "uuid"
-import { useState, type Dispatch } from "react"
+import { useEffect, useState, type Dispatch } from "react"
 import type { Activity } from "../types"
-import type { ActivityActions } from "../reducers/activity-reducer"
+import type { ActivityActions, ActivityState } from "../reducers/activity-reducer"
 
 type FormProps = {
     dispatch: Dispatch<ActivityActions>
+    state: ActivityState
 } 
 
 const initialState : Activity = {
@@ -15,9 +16,16 @@ const initialState : Activity = {
         calories: 0
 }
 
-export default function Form({dispatch}: FormProps) {
+export default function Form({dispatch, state}: FormProps) {
 
     const [activity, setActivity] = useState<Activity>(initialState)
+
+    useEffect(() => {
+        if(state.activeId){
+            const selectedActivity = state.activities.filter(stateActivity => stateActivity.id === state.activeId)[0]
+            setActivity(selectedActivity) //Cambiamos el state inicial que es el que rellenamos con el formulario
+        }
+    },[state.activeId])
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => { //varios tipos según el input o select llamado
         const isNumberField = ['category', 'calories'].includes(e.target.id) //Comprobar si se está escribiendo en uno de esos para luego convertir a numero
@@ -72,6 +80,7 @@ export default function Form({dispatch}: FormProps) {
                 placeholder="Comida, jugo de naranja, ensalada, ejercicio, pesas..."
                 value={activity.name}
                 onChange={handleChange}
+                autoComplete="off"
                 >
                 
                 </input>
@@ -86,7 +95,7 @@ export default function Form({dispatch}: FormProps) {
                 value={activity.calories}
                 onChange={handleChange}
                 >
-                </input>
+            </input>
         </div>
 
         <input 
