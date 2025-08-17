@@ -1,69 +1,84 @@
-# React + TypeScript + Vite
+# 🥗 Contador de Calorías - Proyecto con React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto forma parte de mi aprendizaje en **React**, profundizando en el uso de **`useReducer`**, la gestión de estado global y el trabajo con **`localStorage`** para la persistencia de datos.  
+El objetivo fue construir una aplicación completa que permita llevar un control de calorías **consumidas** y **quemadas** mediante comidas y ejercicios.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Descripción
 
-## Expanding the ESLint configuration
+La aplicación funciona como un **contador de calorías**.  
+El usuario puede introducir **actividades** (comidas o ejercicios) indicando su nombre y calorías correspondientes.  
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+A partir de ahí, la app permite:  
+- **Guardar** comidas y ejercicios en una lista.  
+- **Editar** actividades existentes.  
+- **Eliminar** actividades seleccionadas.  
+- **Visualizar**:
+  - Calorías consumidas.  
+  - Calorías quemadas.  
+  - Balance neto entre ambas.  
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Se trabajó especialmente con **`useReducer`** para organizar la lógica de acciones (`save-activity`, `set-activeId`, `remove-activity`).  
+Además, los datos se almacenan en **localStorage**, garantizando que la información persista aunque se recargue la página.  
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🌐 Proyecto desplegado
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Puedes probar la aplicación directamente aquí:  
+🔗 [**Ver en Netlify**](https://calorietracker164.netlify.app/)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🧩 Conceptos de React aplicados
+
+- **`useReducer`** → Gestión de estado compleja con varias acciones.  
+  - `state` contiene las **actividades** y el **id activo**.  
+  - `dispatch` dispara las acciones desde los componentes.  
+  - El reducer centraliza toda la lógica de edición, borrado y añadido.  
+
+- **Persistencia con `localStorage`** → Los datos de las actividades se guardan en memoria local, evitando que se pierdan al refrescar la página.  
+
+- **Cálculos optimizados con `useMemo`** → Para obtener las calorías **consumidas**, **quemadas** y el **balance neto** sin recalcular en cada render innecesario.  
+
+- **Props y componentes reutilizables** → El estado fluye hacia distintos componentes que muestran resultados o listas de actividades.  
+
+---
+
+## 🧱 Componentes principales
+
+1. **Formulario**  
+   - Permite introducir una nueva actividad (comida o ejercicio).  
+   - Recibe `dispatch` para añadir o editar en el `state`.  
+
+2. **Listado de Actividades**  
+   - Muestra todas las actividades guardadas.  
+   - Cada actividad puede ser seleccionada para edición o borrada.  
+
+3. **Resumen de Calorías**  
+   - Muestra calorías consumidas, quemadas y balance total.  
+   - Calculado mediante `useMemo`.  
+
+4. **Actividad Individual**  
+   - Representa cada elemento de la lista.  
+   - Incluye botones de **editar** y **eliminar** que disparan acciones en el reducer.  
+
+---
+
+## 🧠 Evolución del proyecto
+
+- Primera versión: formulario simple y listado de actividades.  
+- Segunda versión: implementación de **`useReducer`** para centralizar la lógica.  
+- Incorporación de **`localStorage`** para mantener los datos tras recargar.  
+- Mejora de la UI mediante separación de componentes y cálculos optimizados con `useMemo`.  
+
+---
+
+## 🛠️ Tecnologías utilizadas
+
+- **React** con **Vite**  
+- **TypeScript**  
+- **React Hooks** (`useReducer`, `useMemo`)  
+- **Tailwind CSS**  
+- **LocalStorage** (persistencia de datos)  
